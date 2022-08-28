@@ -13,3 +13,7 @@ PHP Web hosting running with NODEJS (EXPRESS)
 * and etc!
 # Why this project is been created?
 * I just learning php and i gonna hosting php web but i don't need to host it on XAMPP or apache, 1-2 months ago i just learn a NodeJS and EXPRESS and that why project is starting.
+# WARNING ABOUT RUNNING SCRIPT!
+* Please fix php path in config.php (Example: C:\\php\\php.exe, DO NOT C:\php\php.exe)
+* Please run ```npm i``` before running ```node index```
+* For info please read in wiki!
