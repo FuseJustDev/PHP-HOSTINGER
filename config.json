@@ -1,0 +1,9 @@
+
+{
+    "php-path" : "C:\\php\\php.exe",
+    "default-index" : "index.php",
+    "anti-redirect-ip" : "no",
+    "domain" : "mydomain.com",
+    "comments" : "DO NOT EDIT CONFIG IN BELOW!",
+    "version" : "1.0.0 beta 1"
+}
