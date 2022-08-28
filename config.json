@@ -4,6 +4,9 @@
     "default-index" : "index.php",
     "anti-redirect-ip" : "no",
     "domain" : "mydomain.com",
+    "cooldown" : "1",
+    "maxrequest" : "500000",
+    "indexfolder" : "\\index",
     "comments" : "DO NOT EDIT CONFIG IN BELOW!",
-    "version" : "1.0.0 beta 1"
+    "version" : "1.0.0 beta 2"
 }

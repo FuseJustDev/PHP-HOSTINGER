@@ -27,8 +27,8 @@ const rateLimit = require('express-rate-limit');
 const { emitWarning } = require('process');
 mainconsole_info("LOADING RATE LIMITER...")
 const limiter = rateLimit({
-	windowMs: 30 * 60 * 1000, // 30 minutes
-	max: 30, // Limit each IP to 20 requests per `window` (here, per 15 minutes)
+	windowMs: config.cooldown * 60 * 1000, // 1 minutes (Follow from config.)
+	max: config.maxrequest, // Limit each IP to 500000 requests per `window` (here, per 1 minutes) (Follow from config)
 	standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
 	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
   message: async (request, response) => {
@@ -40,17 +40,17 @@ const limiter = rateLimit({
 		request.destroy();
 	},
 })
-mainconsole_info(`
-____  __ __  ____       __ __   ___   _____ ______  ____  ____     ___  ____  
-|    \|  |  ||    \     |  |  | /   \ / ___/|      ||    ||    \   /  _]|    \ 
-|  o  )  |  ||  o  )    |  |  ||     (   \_ |      | |  | |  _  | /  [_ |  D  )
-|   _/|  _  ||   _/     |  _  ||  O  |\__  ||_|  |_| |  | |  |  ||    _]|    / 
-|  |  |  |  ||  |       |  |  ||     |/  \ |  |  |   |  | |  |  ||   [_ |    \ 
-|  |  |  |  ||  |       |  |  ||     |\    |  |  |   |  | |  |  ||     ||  .  \
-|__|  |__|__||__|       |__|__| \___/  \___|  |__|  |____||__|__||_____||__|\_|
-                                                                               `)
+mainconsole_info(`____  __ __  ____       __ __   ___   _____ ______  ____  ____     ___  ____  `);
+mainconsole_info('|    \|  |  ||    \     |  |  | /   \ / ___/|      ||    ||    \   /  _]|    \ ');
+mainconsole_info('|  o  )  |  ||  o  )    |  |  ||     (   \_ |      | |  | |  _  | /  [_ |  D  )');
+mainconsole_info('|   _/|  _  ||   _/     |  _  ||  O  |\__  ||_|  |_| |  | |  |  ||    _]|    / ');
+mainconsole_info('|  |  |  |  ||  |       |  |  ||     |/  \ |  |  |   |  | |  |  ||   [_ |    \ ');
+mainconsole_info(`|  |  |  |  ||  |       |  |  ||     |\    |  |  |   |  | |  |  ||     ||  .  \\`)
+mainconsole_info('|__|  |__|__||__|       |__|__| \___/  \___|  |__|  |____||__|__||_____||__|\_|');
+mainconsole_info(`                                                                               `);
 mainconsole_info("PHP HOSTINGER FOR NODEJS (EXPRESS) MADE BY FUSEMCDEV")
-mainconsole_info("PHP HOSTINGER NOW RUNNING WITH VERSION 1.0 BETA 1!")
+mainconsole_info("PHP HOSTINGER NOW RUNNING WITH VERSION 1.0 BETA 2!")
+mainconsole_info("For update, reading changelog.txt!")
 mainconsole_info("Checking Config....")
   if (fs.existsSync(config['php-path'])) {
     mainconsole_info(config['php-path'] + " IS EXIST, PASS!");
@@ -135,6 +135,7 @@ app.set('view engine', 'php');
 
 // routing all .php file to php-express
 app.all(/.+\.php$/, phpExpress.router);
+app.use(express.static(__dirname + `${config.indexfolder}`));
 
 // Writing EXPRESS Code here!
 
@@ -145,5 +146,5 @@ app.get('/', (req, res) => {
 var server = app.listen(80, function () {
   var host = server.address().address;
   var port = server.address().port;
-  mainconsole_info('PHPExpress app listening at http://%s:%s', host, port);
+  mainconsole_info('PHPExpress app listening at http://localhost', host, port);
 });

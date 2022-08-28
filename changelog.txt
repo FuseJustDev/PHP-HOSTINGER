@@ -1,0 +1,6 @@
+Changelog for 1.0.0 BETA 2
+* Adding Changelog!
+* Fix cannot request a css, js and any files are not html or php.
+* default index folder is fixable from config.json.
+* cooldown, maxrequest for anti-spam or dos is fixable from config.json.
+* and still rembemer!, BETA is still developing and fixing bugs (also adding feature) if you have any idea, bugs or any problems, contact us at github (issues tab!)
