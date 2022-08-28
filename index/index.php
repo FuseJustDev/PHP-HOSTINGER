@@ -1,7 +1,9 @@
-<html>
-    <title>Getting Started with PHP HOSTINGER!</title>
-    <body>
-        <h1>Now PHP HOSTINGER is Running Sucessfully!</h1>
-        <h2>Read in wiki for more info!</h2>
-    </body>
-</html>
+<?php
+echo "PHP-HOSTINGER is RUNNING SUCESSFULLY!";
+echo "<br>";
+echo "Read more in wiki!";
+echo "<br>";
+$phpv = phpversion();
+echo "Now running with PHP VERSION:";
+print_r($phpv);
+?>
