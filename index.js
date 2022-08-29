@@ -18,6 +18,7 @@ mainconsole_info("IMPORTING EXPRESS...")
 var express = require('express');
 mainconsole_info("IMPORTING CONFIG...")
 var config = require('./config.json')
+var version = require('./version.json')
 mainconsole_info("LOADING EXPRESS...")
 var app = express();
 mainconsole_info("LOADING FS...")
@@ -48,8 +49,8 @@ mainconsole_info('|  |  |  |  ||  |       |  |  ||     |/  \ |  |  |   |  | |  |
 mainconsole_info(`|  |  |  |  ||  |       |  |  ||     |\    |  |  |   |  | |  |  ||     ||  .  \\`)
 mainconsole_info('|__|  |__|__||__|       |__|__| \___/  \___|  |__|  |____||__|__||_____||__|\_|');
 mainconsole_info(`                                                                               `);
-mainconsole_info("PHP HOSTINGER FOR NODEJS (EXPRESS) MADE BY FUSEMCDEV")
-mainconsole_info("PHP HOSTINGER NOW RUNNING WITH VERSION 1.0 BETA 2!")
+mainconsole_info("PHP HOSTINGER FOR NODEJS (EXPRESS) Read more at https://github.com/FuseJustDev/PHP-HOSTINGER")
+mainconsole_info("PHP HOSTINGER NOW RUNNING WITH VERSION 1.0 BETA 3!")
 mainconsole_info("For update, reading changelog.txt!")
 mainconsole_info("Checking Config....")
   if (fs.existsSync(config['php-path'])) {
@@ -66,6 +67,22 @@ mainconsole_info("Checking Config....")
 
   exec(command, (err, stdout, stderr) => phpversion = stdout)
 // must specify options hash even if no options provided!
+const http = require('https');
+mainconsole_info("CHECKING VERSION FROM GITHUB REPO...");
+const file = fs.createWriteStream("cache.json");
+const request = http.get("https://raw.githubusercontent.com/FuseJustDev/PHP-HOSTINGER/main/version.json", function(response) {
+   response.pipe(file);
+   file.on("finish", () => {
+    file.close();
+    var cachever = require("./cache.json");
+    if (cachever.VERSION == version.VERSION){
+      mainconsole_info('This server is up-to-date')
+    }
+    else{
+      mainconsole_warn('This server is NOT up-to-date, please update from lastest github repo.')
+    }
+   });
+});
 mainconsole_info("ENABLEING USER INPUT...")
 var stdin = process.openStdin();
 stdin.addListener("data", function(d) {
@@ -82,7 +99,7 @@ else if (input === 'blockipslist'){
   mainconsole_info(`List of block ip due to spam packet or dos\n${ips}\nAmount of IP: ${amountips}`)
 } else if (input === 'version'){
 
-mainconsole_info(`\nPHP HOSTINGER VERSION: ${config.version}\nPHP INFO: ${phpversion}`)
+mainconsole_info(`\nPHP HOSTINGER VERSION: ${version.VERSION}\nPHP INFO: ${phpversion}`)
 } else if (input === "status"){
   var os = require('os-utils');
 
@@ -91,7 +108,7 @@ os.cpuUsage(function(v){
   mainconsole_info( 'CPU Usage (%): ' + v );
   mainconsole_info("Memory: " + os.freemem() + "MB of " + os.totalmem() + "MB");
 });
-if (config['anti-redirect-ip'] == "yes"){
+if (config['anti-redirect-ip'] == true){
   var http = require('http');
 var start = new Date();
 http.get({host: `${config.domain}`, port: 80}, function(res) {
@@ -119,7 +136,7 @@ var phpExpress = require('php-express')({
 });
 app.use(limiter)
 app.use((req, res, next) => {
-  if (config['anti-redirect-ip'] === "yes"){
+  if (config['anti-redirect-ip'] === true){
     if (config.domain === req.get('host')){
       next();
     } else {
@@ -141,6 +158,11 @@ app.use(express.static(__dirname + `${config.indexfolder}`));
 
 app.get('/', (req, res) => {
     res.redirect('/' + config['default-index']);
+});
+
+app.get('*', function(req, res) {
+  res.status(404);
+  res.sendfile(config['default-404'], {root: __dirname + config.indexfolder});
 });
 
 var server = app.listen(80, function () {
